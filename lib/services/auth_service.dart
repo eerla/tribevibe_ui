@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
-  static const String baseUrl = 'http://localhost:8000'; // Change to your backend URL
+  static const String baseUrl = 'http://192.168.0.20:8000'; // Change to your backend URL
 
   Future<bool> register(String name, String email, String password) async {
     final response = await http.post(
@@ -17,8 +17,8 @@ class AuthService {
   Future<bool> login(String email, String password) async {
     final response = await http.post(
       Uri.parse('$baseUrl/login'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'email': email, 'password': password}),
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: 'username=${Uri.encodeComponent(email)}&password=${Uri.encodeComponent(password)}',
     );
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);

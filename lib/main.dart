@@ -5,14 +5,14 @@ import 'screens/profile_screen.dart';
 import 'services/auth_service.dart';
 
 void main() {
-  runApp(MeetupCloneApp());
+  runApp(TribeVibeApp());
 }
 
-class MeetupCloneApp extends StatelessWidget {
+class TribeVibeApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Meetup Clone',
+      title: 'Tribe Vibe',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: LoginScreen(),
       routes: {

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import '../widgets/custom_text_field.dart';
+import '../widgets/custom_button.dart';
+import '../theme/app_colors.dart';
 
 class SignupScreen extends StatefulWidget {
   @override
@@ -7,137 +10,108 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  final _formKey = GlobalKey<FormState>();
-  String name = '';
-  String email = '';
-  String password = '';
-  bool isLoading = false;
-  String? error;
+    final _formKey = GlobalKey<FormState>();
+    final TextEditingController _nameController = TextEditingController();
+    final TextEditingController _emailController = TextEditingController();
+    final TextEditingController _passwordController = TextEditingController();
+    bool isLoading = false;
+    String? error;
 
-  void _signup() async {
-    setState(() { isLoading = true; error = null; });
-    final success = await AuthService().register(name, email, password);
-    setState(() { isLoading = false; });
-    if (success) {
-      Navigator.pushReplacementNamed(context, '/login');
-    } else {
-      setState(() { error = 'Signup failed'; });
+    @override
+    void dispose() {
+      _nameController.dispose();
+      _emailController.dispose();
+      _passwordController.dispose();
+      super.dispose();
     }
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    final Color primaryColor = Color(0xFF22223B);
-    final Color accentColor = Color(0xFF4A4E69);
-    final Color backgroundColor = Color(0xFFF2E9E4);
-    final Color buttonColor = Color(0xFF9A8C98);
-    final Color errorColor = Color(0xFFC9ADA7);
+    void _signup() async {
+      setState(() { isLoading = true; error = null; });
+      final success = await AuthService().register(
+        _nameController.text,
+        _emailController.text,
+        _passwordController.text,
+      );
+      setState(() { isLoading = false; });
+      if (success) {
+        Navigator.pushReplacementNamed(context, '/login');
+      } else {
+        setState(() { error = 'Signup failed'; });
+      }
+    }
 
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    'Create Account',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: primaryColor,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 32),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Name',
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      prefixIcon: Icon(Icons.person, color: accentColor),
-                    ),
-                    onChanged: (val) => name = val,
-                    validator: (val) => val!.isEmpty ? 'Enter name' : null,
-                  ),
-                  SizedBox(height: 16),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      prefixIcon: Icon(Icons.email, color: accentColor),
-                    ),
-                    onChanged: (val) => email = val,
-                    validator: (val) => val!.isEmpty ? 'Enter email' : null,
-                  ),
-                  SizedBox(height: 16),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      prefixIcon: Icon(Icons.lock, color: accentColor),
-                    ),
-                    obscureText: true,
-                    onChanged: (val) => password = val,
-                    validator: (val) => val!.isEmpty ? 'Enter password' : null,
-                  ),
-                  SizedBox(height: 24),
-                  if (error != null)
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        backgroundColor: AppColors.background,
+        body: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
                     Text(
-                      error!,
-                      style: TextStyle(color: errorColor, fontWeight: FontWeight.bold),
+                      'Create Account',
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
+                      ),
                       textAlign: TextAlign.center,
                     ),
-                  SizedBox(height: 10),
-                  isLoading
-                      ? Center(child: CircularProgressIndicator())
-                      : ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: buttonColor,
-                            foregroundColor: Colors.white,
-                            padding: EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) _signup();
-                          },
-                          child: Text('Sign Up', style: TextStyle(fontSize: 18)),
-                        ),
-                  SizedBox(height: 16),
-                  TextButton(
-                    onPressed: () => Navigator.pushNamed(context, '/login'),
-                    child: Text(
-                      'Already have an account? Login',
-                      style: TextStyle(color: accentColor, fontWeight: FontWeight.w600),
+                    SizedBox(height: 32),
+                    CustomTextField(
+                      label: 'Name',
+                      controller: _nameController,
                     ),
-                  ),
-                ],
+                    SizedBox(height: 16),
+                    CustomTextField(
+                      label: 'Email',
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    SizedBox(height: 16),
+                    CustomTextField(
+                      label: 'Password',
+                      controller: _passwordController,
+                      obscureText: true,
+                    ),
+                    SizedBox(height: 24),
+                    if (error != null)
+                      Text(
+                        error!,
+                        style: TextStyle(color: Color(0xFFC9ADA7), fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
+                    if (error != null) SizedBox(height: 12),
+                    isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : CustomButton(
+                            text: 'Sign Up',
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                _signup();
+                              }
+                            },
+                            color: AppColors.button,
+                          ),
+                    SizedBox(height: 16),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, '/login');
+                      },
+                      child: const Text('Already have an account? Login'),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    }
   }
-}
