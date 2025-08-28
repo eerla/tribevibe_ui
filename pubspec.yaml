@@ -1,5 +1,5 @@
-name: meetup_clone
-description: A Flutter Meetup.com clone frontend
+name: tribe_vibe  
+description: A Flutter frontend for tribe_vibe
 publish_to: 'none'
 version: 1.0.0+1
 environment:
