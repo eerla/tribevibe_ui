@@ -63,6 +63,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       const SizedBox(height: 24),
                       CustomButton(
+                        text: 'View Events',
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/events');
+                        },
+                        color: AppColors.button,
+                        isFullWidth: false,
+                      ),
+                      const SizedBox(height: 16),
+                      CustomButton(
                         text: 'Logout',
                         onPressed: _logout,
                         color: AppColors.button,

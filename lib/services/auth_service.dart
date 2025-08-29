@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../constants.dart';
 
 class AuthService {
-  static const String baseUrl = 'http://192.168.0.20:8000'; // Change to your backend URL
+  static const String baseUrl = AppConstants.baseUrl;
 
   Future<bool> register(String name, String email, String password) async {
     final response = await http.post(
