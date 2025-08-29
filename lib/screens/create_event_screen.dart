@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/event.dart';
 import '../services/event_service.dart';
 import '../theme/app_colors.dart';
+import '../widgets/modern_app_bar.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/custom_button.dart';
 
@@ -54,10 +55,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        title: const Text('Create Event', style: TextStyle(color: Colors.white)),
-      ),
+      appBar: const ModernAppBar(title: 'Create Event'),
       body: Center(
         child: SingleChildScrollView(
           child: Padding(

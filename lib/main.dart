@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'screens/login_screen.dart';
 import 'screens/signup_screen.dart';
 import 'screens/profile_screen.dart';
@@ -6,6 +7,7 @@ import 'screens/event_list_screen.dart';
 import 'screens/event_detail_screen.dart';
 import 'screens/create_event_screen.dart';
 import 'services/auth_service.dart';
+import 'theme/app_theme.dart';
 
 void main() {
   runApp(TribeVibeApp());
@@ -16,7 +18,7 @@ class TribeVibeApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Tribe Vibe',
-      theme: ThemeData(primarySwatch: Colors.blue),
+  theme: AppTheme.lightTheme,
       home: LoginScreen(),
       routes: {
         '/login': (context) => LoginScreen(),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../models/event.dart';
 import '../services/event_service.dart';
 import '../theme/app_colors.dart';
+import '../widgets/modern_app_bar.dart';
+import '../widgets/modern_card.dart';
 
 class EventDetailScreen extends StatelessWidget {
   final int eventId;
@@ -11,11 +13,7 @@ class EventDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        title: const Text('Event Details', style: TextStyle(color: AppColors.buttonText)),
-        iconTheme: const IconThemeData(color: AppColors.buttonText),
-      ),
+  appBar: const ModernAppBar(title: 'Event Details'),
       body: FutureBuilder<Event>(
         future: EventService().getEventById(eventId),
         builder: (context, snapshot) {
@@ -29,10 +27,9 @@ class EventDetailScreen extends StatelessWidget {
           final event = snapshot.data!;
           return Padding(
             padding: const EdgeInsets.all(24.0),
-            child: Card(
-              color: AppColors.card,
-              elevation: 4,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            child: ModernCard(
+              elevation: 6,
+              borderRadius: 24,
               child: Padding(
                 padding: const EdgeInsets.all(24.0),
                 child: Column(
