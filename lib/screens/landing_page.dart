@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import './_landing_page_extras.dart';
+import '../widgets/event_card.dart';
 // Category data model for responsive grid
 class _CategoryData {
   final String label;
@@ -277,6 +278,7 @@ class LandingPage extends StatelessWidget {
                     );
                   },
                 ),
+                // Explore Featured Events
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
                   child: Column(
@@ -345,10 +347,29 @@ class LandingPage extends StatelessWidget {
                               : constraints.maxWidth > 600
                                   ? 2
                                   : 1;
+                          // Define event data arrays here
+                          final List<String> eventTitles = [
+                            'Flutter Community Meetup',
+                            'Yoga in the Park',
+                            'Startup Pitch Night',
+                            'Art & Wine Evening',
+                          ];
+                          final List<String> eventDates = [
+                            'Sep 10, 2025 · 6:00 PM',
+                            'Sep 12, 2025 · 8:00 AM',
+                            'Sep 15, 2025 · 7:30 PM',
+                            'Sep 18, 2025 · 5:00 PM',
+                          ];
+                          final List<String> eventLocations = [
+                            'Downtown Community Hall',
+                            'Central Park',
+                            'Tech Hub Auditorium',
+                            'Vineyard Art Space',
+                          ];
                           return GridView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: 4,
+                            itemCount: eventTitles.length,
                             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: crossAxisCount,
                               crossAxisSpacing: 16,
@@ -356,82 +377,10 @@ class LandingPage extends StatelessWidget {
                               childAspectRatio: 1.2,
                             ),
                             itemBuilder: (context, index) {
-                              // Placeholder event data
-                              final eventTitles = [
-                                'Flutter Community Meetup',
-                                'Yoga in the Park',
-                                'Startup Pitch Night',
-                                'Art & Wine Evening',
-                              ];
-                              final eventDates = [
-                                'Sep 10, 2025 · 6:00 PM',
-                                'Sep 12, 2025 · 8:00 AM',
-                                'Sep 15, 2025 · 7:30 PM',
-                                'Sep 18, 2025 · 5:00 PM',
-                              ];
-                              final eventLocations = [
-                                'Downtown Community Hall',
-                                'Central Park',
-                                'Tech Hub Auditorium',
-                                'Vineyard Art Space',
-                              ];
-                              return Card(
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                                elevation: 2,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      // Image placeholder
-                                      Container(
-                                        width: 60,
-                                        height: 60,
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey[200],
-                                          borderRadius: BorderRadius.circular(12),
-                                        ),
-                                        child: const Icon(Icons.image, size: 36, color: Colors.grey),
-                                      ),
-                                      Text(
-                                        eventTitles[index % eventTitles.length],
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                          color: Color(0xFF232136),
-                                        ),
-                                      ),
-                                      Text(
-                                        eventDates[index % eventDates.length],
-                                        style: TextStyle(
-                                          color: Colors.grey[700],
-                                          fontSize: 13,
-                                        ),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          const Icon(Icons.location_on, size: 15, color: Colors.grey),
-                                          const SizedBox(width: 4),
-                                          Flexible(
-                                            child: Text(
-                                              eventLocations[index % eventLocations.length],
-                                              style: TextStyle(
-                                                color: Colors.grey[600],
-                                                fontSize: 13,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 1,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                              return EventCard(
+                                title: eventTitles[index],
+                                date: eventDates[index],
+                                location: eventLocations[index],
                               );
                             },
                           );
