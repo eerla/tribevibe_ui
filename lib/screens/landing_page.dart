@@ -207,7 +207,7 @@ class LandingPage extends StatelessWidget {
                                               width: constraints.maxWidth,
                                               child: Flex(
                                                 direction: isWide ? Axis.horizontal : Axis.vertical,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
                                                   // Popular Cities
@@ -220,7 +220,7 @@ class LandingPage extends StatelessWidget {
                                                       borderRadius: BorderRadius.circular(18),
                                                     ),
                                                     child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      crossAxisAlignment: CrossAxisAlignment.center,
                                                       children: [
                                                         const Text('Popular cities on TribeVibe', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                                                         const SizedBox(height: 8),
