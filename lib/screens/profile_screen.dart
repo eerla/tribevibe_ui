@@ -3,6 +3,7 @@ import '../services/auth_service.dart';
 import '../widgets/profile_card.dart';
 import '../widgets/custom_button.dart';
 import '../theme/app_colors.dart';
+import '../widgets/event_card.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -106,159 +107,175 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 ),
                                               ],
                                             ),
-                                            const SizedBox(height: 24),
-                                            Text(
-                                              user!['name'] ?? 'User',
-                                              style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white),
+                                                    const SizedBox(height: 24),
+                                                    Text(
+                                                      user!['name'] ?? 'User',
+                                                      style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white),
+                                                    ),
+                                                    const SizedBox(height: 8),
+                                                    Text(
+                                                      user!['email'] ?? '',
+                                                      style: const TextStyle(fontSize: 16, color: Colors.white70),
+                                                    ),
+                                                    const SizedBox(height: 12),
+                                                    Row(
+                                                      children: [
+                                                        Icon(Icons.location_on, color: AppColors.limeGreen, size: 18),
+                                                        const SizedBox(width: 6),
+                                                        Text('Manchester, CT', style: TextStyle(color: Colors.white, fontSize: 15)),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(height: 8),
+                                                    Row(
+                                                      children: [
+                                                        Icon(Icons.calendar_today, color: AppColors.vibrantCoral, size: 16),
+                                                        const SizedBox(width: 6),
+                                                        Text('Joined TribeVibe on Aug 2025', style: TextStyle(color: Colors.white70, fontSize: 14)),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
                                             ),
-                                            const SizedBox(height: 8),
-                                            Text(
-                                              user!['email'] ?? '',
-                                              style: const TextStyle(fontSize: 16, color: Colors.white70),
+                                            const SizedBox(height: 32),
+                                            // Stats Row
+                                            Container(
+                                              width: 340,
+                                              decoration: BoxDecoration(
+                                                color: AppColors.card,
+                                                borderRadius: BorderRadius.circular(16),
+                                                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 2))],
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                children: [
+                                                  _StatColumn(label: 'Groups', value: '0'),
+                                                  _StatColumn(label: 'Interests', value: '0'),
+                                                  _StatColumn(label: 'RSVPs', value: '0'),
+                                                ],
+                                              ),
                                             ),
-                                            const SizedBox(height: 12),
-                                            Row(
-                                              children: [
-                                                Icon(Icons.location_on, color: AppColors.limeGreen, size: 18),
-                                                const SizedBox(width: 6),
-                                                Text('Manchester, CT', style: TextStyle(color: Colors.white, fontSize: 15)),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 8),
-                                            Row(
-                                              children: [
-                                                Icon(Icons.calendar_today, color: AppColors.vibrantCoral, size: 16),
-                                                const SizedBox(width: 6),
-                                                Text('Joined TribeVibe on Aug 2025', style: TextStyle(color: Colors.white70, fontSize: 14)),
-                                              ],
+                                            const SizedBox(height: 32),
+                                            // User avatar, name, and edit profile
+                                            Container(
+                                              width: 340,
+                                              padding: const EdgeInsets.all(20),
+                                              decoration: BoxDecoration(
+                                                color: AppColors.card,
+                                                borderRadius: BorderRadius.circular(16),
+                                                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 2))],
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  CircleAvatar(
+                                                    radius: 24,
+                                                    backgroundColor: AppColors.secondary,
+                                                    child: Text(
+                                                      (user!['name'] ?? 'U').substring(0, 1).toUpperCase(),
+                                                      style: const TextStyle(fontSize: 22, color: Colors.white, fontWeight: FontWeight.bold),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 16),
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(user!['name'] ?? '', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.text)),
+                                                        TextButton(
+                                                          onPressed: () {},
+                                                          style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                                                          child: Text('Edit profile', style: TextStyle(color: AppColors.primary, decoration: TextDecoration.underline)),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ],
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 32),
-                                    // Stats Row
-                                    Container(
-                                      width: 340,
-                                      decoration: BoxDecoration(
-                                        color: AppColors.card,
-                                        borderRadius: BorderRadius.circular(16),
-                                        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 2))],
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          _StatColumn(label: 'Groups', value: '0'),
-                                          _StatColumn(label: 'Interests', value: '0'),
-                                          _StatColumn(label: 'RSVPs', value: '0'),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(height: 32),
-                                    // User avatar, name, and edit profile
-                                    Container(
-                                      width: 340,
-                                      padding: const EdgeInsets.all(20),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.card,
-                                        borderRadius: BorderRadius.circular(16),
-                                        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 2))],
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          CircleAvatar(
-                                            radius: 24,
-                                            backgroundColor: AppColors.secondary,
-                                            child: Text(
-                                              (user!['name'] ?? 'U').substring(0, 1).toUpperCase(),
-                                              style: const TextStyle(fontSize: 22, color: Colors.white, fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                          const SizedBox(width: 16),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(user!['name'] ?? '', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.text)),
-                                                TextButton(
-                                                  onPressed: () {},
-                                                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                                                  child: Text('Edit profile', style: TextStyle(color: AppColors.primary, decoration: TextDecoration.underline)),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
                               const SizedBox(width: 32),
-                              // Column 2: Registered events, joined groups, attending events (dummy data)
+                              // Column 2: Registered events, joined groups, attending events (dummy data as individual cards)
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     // Registered Events
-                                    Container(
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.all(24),
-                                      margin: const EdgeInsets.only(bottom: 24),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.card,
-                                        borderRadius: BorderRadius.circular(16),
-                                        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 2))],
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          const Text('Registered Events', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                                          const SizedBox(height: 8),
-                                          Text('Flutter Meetup 2025'),
-                                          Text('AI Conference'),
-                                          Text('Hackathon Spring'),
-                                        ],
-                                      ),
+                                    const Text('Registered Events', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                                    const SizedBox(height: 8),
+                                    GridView.count(
+                                      crossAxisCount: 2,
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      mainAxisSpacing: 16,
+                                      crossAxisSpacing: 16,
+                                      childAspectRatio: 1.2,
+                                      children: [
+                                        EventCard(
+                                          title: 'Flutter Community Meetup',
+                                          date: 'Sep 10, 2025 · 6:00 PM',
+                                          location: 'Downtown Community Hall',
+                                        ),
+                                        EventCard(
+                                          title: 'Yoga in the Park',
+                                          date: 'Sep 12, 2025 · 8:00 AM',
+                                          location: 'Central Park',
+                                        ),
+                                        EventCard(
+                                          title: 'Startup Pitch Night',
+                                          date: 'Sep 15, 2025 · 7:30 PM',
+                                          location: 'Tech Hub Auditorium',
+                                        ),
+                                      ],
                                     ),
+                                    const SizedBox(height: 32),
                                     // Joined Groups
-                                    Container(
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.all(24),
-                                      margin: const EdgeInsets.only(bottom: 24),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.card,
-                                        borderRadius: BorderRadius.circular(16),
-                                        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 2))],
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          const Text('Joined Groups', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                                          const SizedBox(height: 8),
-                                          Text('Flutter Devs'),
-                                          Text('AI Enthusiasts'),
-                                        ],
-                                      ),
+                                    const Text('Joined Groups', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                                    const SizedBox(height: 8),
+                                    GridView.count(
+                                      crossAxisCount: 2,
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      mainAxisSpacing: 16,
+                                      crossAxisSpacing: 16,
+                                      childAspectRatio: 1.2,
+                                      children: [
+                                        EventCard(
+                                          title: 'Art & Wine Evening',
+                                          date: 'Sep 18, 2025 · 5:00 PM',
+                                          location: 'Vineyard Art Space',
+                                        ),
+                                        EventCard(
+                                          title: 'AI Conference',
+                                          date: 'Sep 20, 2025 · 9:00 AM',
+                                          location: 'Tech Hub Auditorium',
+                                        ),
+                                      ],
                                     ),
+                                    const SizedBox(height: 32),
                                     // Attending Events
-                                    Container(
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.all(24),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.card,
-                                        borderRadius: BorderRadius.circular(16),
-                                        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 2))],
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          const Text('Attending Events', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                                          const SizedBox(height: 8),
-                                          Text('AI Conference'),
-                                          Text('Hackathon Spring'),
-                                        ],
-                                      ),
+                                    const Text('Attending Events', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                                    const SizedBox(height: 8),
+                                    GridView.count(
+                                      crossAxisCount: 2,
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      mainAxisSpacing: 16,
+                                      crossAxisSpacing: 16,
+                                      childAspectRatio: 1.2,
+                                      children: [
+                                        EventCard(
+                                          title: 'Hackathon Spring',
+                                          date: 'Sep 22, 2025 · 10:00 AM',
+                                          location: 'Central Park',
+                                        ),
+                                        EventCard(
+                                          title: 'Flutter Meetup 2025',
+                                          date: 'Sep 25, 2025 · 6:00 PM',
+                                          location: 'Downtown Community Hall',
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -301,37 +318,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ],
                           ),
+                         ),
                         ),
                       ),
-                    ),
-                    // Footer (reuse from landing page)
-                    Container(
-                      width: double.infinity,
-                      color: AppColors.primary,
-                      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text('TribeVibe', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20)),
-                          const SizedBox(height: 12),
-                          Wrap(
-                            alignment: WrapAlignment.center,
-                            spacing: 24,
-                            children: [
-                              _FooterLink(label: 'About'),
-                              _FooterLink(label: 'Careers'),
-                              _FooterLink(label: 'Blog'),
-                              _FooterLink(label: 'Help'),
-                              _FooterLink(label: 'Privacy'),
-                              _FooterLink(label: 'Terms'),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          Text('© 2025 TribeVibe. All rights reserved.', style: TextStyle(color: Colors.white70)),
-                        ],
+                      // Footer (reuse from landing page)
+                      Container(
+                        width: double.infinity,
+                        color: AppColors.primary,
+                        padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text('TribeVibe', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20)),
+                            const SizedBox(height: 12),
+                            Wrap(
+                              alignment: WrapAlignment.center,
+                              spacing: 24,
+                              children: [
+                                _FooterLink(label: 'About'),
+                                _FooterLink(label: 'Careers'),
+                                _FooterLink(label: 'Blog'),
+                                _FooterLink(label: 'Help'),
+                                _FooterLink(label: 'Privacy'),
+                                _FooterLink(label: 'Terms'),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            Text('© 2025 TribeVibe. All rights reserved.', style: TextStyle(color: Colors.white70)),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
                 ),
     );
   }
@@ -371,3 +388,5 @@ class _FooterLink extends StatelessWidget {
     );
   }
 }
+
+
