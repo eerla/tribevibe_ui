@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'screens/login_screen.dart';
+import 'screens/landing_page.dart';
 import 'screens/signup_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/event_list_screen.dart';
@@ -19,7 +20,7 @@ class TribeVibeApp extends StatelessWidget {
     return MaterialApp(
       title: 'Tribe Vibe',
   theme: AppTheme.lightTheme,
-      home: LoginScreen(),
+  home: const LandingPage(),
       routes: {
         '/login': (context) => LoginScreen(),
         '/signup': (context) => SignupScreen(),
