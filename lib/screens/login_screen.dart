@@ -42,8 +42,11 @@ class _LoginSheetState extends State<LoginSheet> {
     final success = await AuthService().login(_emailController.text, _passwordController.text);
     setState(() { isLoading = false; });
     if (success) {
+      // Fetch username after login
+      final profile = await AuthService().getProfile();
+      final username = profile?['name'] ?? 'User';
       Navigator.pop(context); // Close the sheet
-      Navigator.pushReplacementNamed(context, '/profile');
+      Navigator.pushReplacementNamed(context, '/suggested-events', arguments: username);
     } else {
       setState(() { error = 'Invalid credentials'; });
     }
