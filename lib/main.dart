@@ -22,8 +22,8 @@ class TribeVibeApp extends StatelessWidget {
   theme: AppTheme.lightTheme,
   home: const LandingPage(),
       routes: {
-        '/login': (context) => LoginScreen(),
-        '/signup': (context) => SignupScreen(),
+        '/login': (context) => const LoginSheet(),
+        '/signup': (context) => const SignupSheet(),
         '/profile': (context) => ProfileScreen(),
         '/events': (context) => EventListScreen(),
         '/event_detail': (context) => EventDetailScreen(eventId: 0), // Placeholder, use push with args

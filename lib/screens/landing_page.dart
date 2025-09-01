@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import './_landing_page_extras.dart';
 import '../widgets/event_card.dart';
+import '../screens/login_screen.dart';
+import '../screens/signup_screen.dart';
 // Category data model for responsive grid
 class _CategoryData {
   final String label;
@@ -10,19 +12,19 @@ class _CategoryData {
   const _CategoryData(this.label, this.icon, this.color);
 }
 
+const List<_CategoryData> categories = [
+  _CategoryData('Travel and Outdoor', Icons.park, Colors.green),
+  _CategoryData('Social Activities', Icons.groups, Colors.purple),
+  _CategoryData('Hobbies & Passions', Icons.palette, Colors.orange),
+  _CategoryData('Sports & Fitness', Icons.sports_soccer, Colors.blue),
+  _CategoryData('Health & Wellbeing', Icons.spa, Colors.teal),
+  _CategoryData('Technology', Icons.computer, Colors.pink),
+  _CategoryData('Art & Culture', Icons.theater_comedy, Colors.amber),
+  _CategoryData('Games', Icons.casino, Colors.cyan),
+];
+
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
-
-  static final List<_CategoryData> categories = [
-    _CategoryData('Travel and Outdoor', Icons.park, Colors.green),
-    _CategoryData('Social Activities', Icons.groups, Colors.purple),
-    _CategoryData('Hobbies & Passions', Icons.palette, Colors.orange),
-    _CategoryData('Sports & Fitness', Icons.sports_soccer, Colors.blue),
-    _CategoryData('Health & Wellbeing', Icons.spa, Colors.teal),
-    _CategoryData('Technology', Icons.computer, Colors.pink),
-    _CategoryData('Art & Culture', Icons.theater_comedy, Colors.amber),
-    _CategoryData('Games', Icons.casino, Colors.cyan),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +45,12 @@ class LandingPage extends StatelessWidget {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pushNamed(context, '/login'),
+            onPressed: () => LoginSheet.show(context),
             child: const Text('Log in', style: TextStyle(color: Colors.white)),
           ),
           const SizedBox(width: 8),
           ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, '/signup'),
+            onPressed: () => SignupSheet.show(context),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.secondary,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -62,142 +64,203 @@ class LandingPage extends StatelessWidget {
         child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 1200),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Hero Section
-                SizedBox(height: 32),
-                Container(
-                  margin: const EdgeInsets.only(top: 16),
-                  padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [AppColors.primary, AppColors.secondary.withOpacity(0.7)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Find your tribe. Join amazing events.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.2,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final isMobile = constraints.maxWidth < 600;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Hero Section
+                    SizedBox(height: isMobile ? 8 : 32),
+                    Container(
+                      margin: const EdgeInsets.only(top: 16),
+                      padding: EdgeInsets.symmetric(
+                        vertical: isMobile ? 24 : 48,
+                        horizontal: isMobile ? 12 : 24,
+                      ),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [AppColors.primary, AppColors.secondary.withOpacity(0.7)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
                         ),
                       ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'Discover and join local groups, meet new people, and explore your interests.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 18),
-                      ),
-                      const SizedBox(height: 32),
-                      Row(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Expanded(
-                            child: TextField(
-                              decoration: InputDecoration(
-                                hintText: 'Search events, groups, or interests',
-                                filled: true,
-                                fillColor: Colors.white,
-                                prefixIcon: Icon(Icons.search, color: AppColors.primary),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                  borderSide: BorderSide.none,
-                                ),
-                              ),
+                          Text(
+                            'Find your tribe. Join amazing events.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: isMobile ? 22 : 32,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.2,
                             ),
                           ),
-                          const SizedBox(width: 12),
-                          ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.button,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                            ),
-                            child: const Text('Search', style: TextStyle(color: Colors.white)),
+                          SizedBox(height: isMobile ? 8 : 16),
+                          Text(
+                            'Discover and join local groups, meet new people, and explore your interests.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: isMobile ? 14 : 18),
+                          ),
+                          SizedBox(height: isMobile ? 16 : 32),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                    hintText: 'Search events, groups, or interests',
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    prefixIcon: Icon(Icons.search, color: AppColors.primary),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: isMobile ? 8 : 12),
+                              ElevatedButton(
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.button,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                ),
+                                child: const Text('Search', style: TextStyle(color: Colors.white)),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
-                // Modern Two-Column Intro Section
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      bool isWide = constraints.maxWidth > 700;
-                      return Flex(
-                        direction: isWide ? Axis.horizontal : Axis.vertical,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // Left: Text and Button
-                          Expanded(
-                            flex: 2,
-                            child: Column(
-                              crossAxisAlignment: isWide ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+                    ),
+                    // Modern Two-Column Intro Section
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: isMobile ? 16 : 40,
+                        horizontal: isMobile ? 8 : 16,
+                      ),
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          bool isWide = constraints.maxWidth > 700;
+                          if (isWide) {
+                            return Flex(
+                              direction: Axis.horizontal,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                // Left: Text and Button
+                                Flexible(
+                                  flex: 2,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'This is the modern way to meet people',
+                                        style: TextStyle(
+                                          fontSize: isMobile ? 18 : 28,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.primary,
+                                          letterSpacing: 1.1,
+                                        ),
+                                        textAlign: TextAlign.left,
+                                      ),
+                                      SizedBox(height: isMobile ? 10 : 18),
+                                      Text(
+                                        'Find and join events of all types, connect with like-minded people, and share your passions. TribeVibe makes it easy to discover new friendships and experiences in your city or online.',
+                                        style: TextStyle(fontSize: isMobile ? 13 : 17, color: AppColors.accent.withOpacity(0.95)),
+                                        textAlign: TextAlign.left,
+                                      ),
+                                      SizedBox(height: isMobile ? 16 : 28),
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: ElevatedButton(
+                                          onPressed: () => SignupSheet.show(context),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: AppColors.button,
+                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                                            padding: EdgeInsets.symmetric(horizontal: isMobile ? 18 : 32, vertical: isMobile ? 10 : 16),
+                                          ),
+                                          child: Text('Join TribeVibe', style: TextStyle(color: Colors.white, fontSize: isMobile ? 14 : 18)),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(width: 40),
+                                // Right: Image Placeholder
+                                Flexible(
+                                  flex: 2,
+                                  child: Center(
+                                    child: Container(
+                                      width: isMobile ? 120 : 220,
+                                      height: isMobile ? 90 : 180,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.secondary.withOpacity(0.08),
+                                        borderRadius: BorderRadius.circular(24),
+                                      ),
+                                      child: Icon(Icons.groups, size: isMobile ? 48 : 100, color: Colors.grey),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          } else {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
+                                // Left: Text and Button
                                 Text(
                                   'This is the modern way to meet people',
                                   style: TextStyle(
-                                    fontSize: 28,
+                                    fontSize: isMobile ? 18 : 28,
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.primary,
                                     letterSpacing: 1.1,
                                   ),
-                                  textAlign: isWide ? TextAlign.left : TextAlign.center,
+                                  textAlign: TextAlign.center,
                                 ),
-                                const SizedBox(height: 18),
+                                SizedBox(height: isMobile ? 10 : 18),
                                 Text(
                                   'Find and join events of all types, connect with like-minded people, and share your passions. TribeVibe makes it easy to discover new friendships and experiences in your city or online.',
-                                  style: TextStyle(fontSize: 17, color: AppColors.accent.withOpacity(0.95)),
-                                  textAlign: isWide ? TextAlign.left : TextAlign.center,
+                                  style: TextStyle(fontSize: isMobile ? 13 : 17, color: AppColors.accent.withOpacity(0.95)),
+                                  textAlign: TextAlign.center,
                                 ),
-                                const SizedBox(height: 28),
+                                SizedBox(height: isMobile ? 16 : 28),
                                 Align(
-                                  alignment: isWide ? Alignment.centerLeft : Alignment.center,
+                                  alignment: Alignment.center,
                                   child: ElevatedButton(
-                                    onPressed: () => Navigator.pushNamed(context, '/signup'),
+                                    onPressed: () => SignupSheet.show(context),
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: AppColors.button,
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                                      padding: EdgeInsets.symmetric(horizontal: isMobile ? 18 : 32, vertical: isMobile ? 10 : 16),
                                     ),
-                                    child: const Text('Join TribeVibe', style: TextStyle(color: Colors.white, fontSize: 18)),
+                                    child: Text('Join TribeVibe', style: TextStyle(color: Colors.white, fontSize: isMobile ? 14 : 18)),
+                                  ),
+                                ),
+                                SizedBox(height: isMobile ? 16 : 40),
+                                // Right: Image Placeholder
+                                Center(
+                                  child: Container(
+                                    width: isMobile ? 120 : 220,
+                                    height: isMobile ? 90 : 180,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.secondary.withOpacity(0.08),
+                                      borderRadius: BorderRadius.circular(24),
+                                    ),
+                                    child: Icon(Icons.groups, size: isMobile ? 48 : 100, color: Colors.grey),
                                   ),
                                 ),
                               ],
-                            ),
-                          ),
-                          SizedBox(width: isWide ? 40 : 0, height: isWide ? 0 : 40),
-                          // Right: Image Placeholder
-                          Expanded(
-                            flex: 2,
-                            child: Center(
-                              child: Container(
-                                width: 220,
-                                height: 180,
-                                decoration: BoxDecoration(
-                                  color: AppColors.secondary.withOpacity(0.08),
-                                  borderRadius: BorderRadius.circular(24),
-                                ),
-                                child: const Icon(Icons.groups, size: 100, color: Colors.grey),
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
+                            );
+                          }
+                        },
+                      ),
+                    ),
                 // Popular Cities & How TribeVibe Works Side by Side
                 LayoutBuilder(
                   builder: (context, constraints) {
@@ -374,7 +437,7 @@ class LandingPage extends StatelessWidget {
                               crossAxisCount: crossAxisCount,
                               crossAxisSpacing: 16,
                               mainAxisSpacing: 16,
-                              childAspectRatio: 1.2,
+                              childAspectRatio: 1.0,
                             ),
                             itemBuilder: (context, index) {
                               return EventCard(
@@ -440,10 +503,12 @@ class LandingPage extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
+            );
+              }
           ),
         ),
       ),
+    ),
     );
   }
 }
