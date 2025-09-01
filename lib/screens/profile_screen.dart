@@ -199,7 +199,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _logout() async {
     await AuthService().logout();
-    Navigator.pushReplacementNamed(context, '/login');
+    Navigator.pushReplacementNamed(context, '/');
   }
 
   @override
