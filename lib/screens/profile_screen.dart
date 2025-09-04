@@ -17,7 +17,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         gradient: LinearGradient(
-          colors: [AppColors.primary, AppColors.accent.withOpacity(0.95)],
+          colors: [AppColors.primary, AppColors.accentText.withOpacity(0.95)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -58,7 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(height: 12),
             Row(
               children: [
-                Icon(Icons.location_on, color: AppColors.limeGreen, size: 18),
+                Icon(Icons.location_on, color: Colors.green, size: 18),
                 SizedBox(width: 6),
                 Text('Manchester, CT', style: TextStyle(color: Colors.white, fontSize: isMobile ? 14 : 15)),
               ],
@@ -66,7 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(height: 8),
             Row(
               children: [
-                Icon(Icons.calendar_today, color: AppColors.vibrantCoral, size: 16),
+                Icon(Icons.calendar_today, color: AppColors.primary, size: 16),
                 SizedBox(width: 6),
                 Text('Joined TribeVibe on Aug 2025', style: TextStyle(color: Colors.white70, fontSize: isMobile ? 13 : 14)),
               ],
@@ -118,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(user!['name'] ?? '', style: TextStyle(fontWeight: FontWeight.bold, fontSize: isMobile ? 14 : 16, color: AppColors.text)),
+                Text(user!['name'] ?? '', style: TextStyle(fontWeight: FontWeight.bold, fontSize: isMobile ? 14 : 16, color: AppColors.primaryText)),
                 TextButton(
                   onPressed: () {},
                   style: TextButton.styleFrom(padding: EdgeInsets.zero),
@@ -162,14 +162,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Join over 10k members on TribeVibe', style: TextStyle(fontWeight: FontWeight.bold, fontSize: isMobile ? 15 : 18, color: AppColors.accent)),
+          Text('Join over 10k members on TribeVibe', style: TextStyle(fontWeight: FontWeight.bold, fontSize: isMobile ? 15 : 18, color: AppColors.accentText)),
           SizedBox(height: 8),
-          Text('Subscribers are more likely to meet people with similar goals and interests.', style: TextStyle(color: AppColors.text)),
+          Text('Subscribers are more likely to meet people with similar goals and interests.', style: TextStyle(color: AppColors.primaryText)),
           SizedBox(height: 18),
           ElevatedButton(
             onPressed: () {},
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.vibrantCoral,
+              backgroundColor: AppColors.primary,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
@@ -421,7 +421,7 @@ class _StatColumn extends StatelessWidget {
         children: [
           Text(value, style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize ?? 20, color: AppColors.primary)),
           const SizedBox(height: 4),
-          Text(label, style: TextStyle(color: AppColors.text, fontSize: fontSize != null ? fontSize! * 0.8 : null)),
+          Text(label, style: TextStyle(color: AppColors.primaryText, fontSize: fontSize != null ? fontSize! * 0.8 : null)),
         ],
       ),
     );

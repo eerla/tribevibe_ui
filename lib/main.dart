@@ -12,14 +12,14 @@ import 'services/auth_service.dart';
 import 'theme/app_theme.dart';
 
 void main() {
-  runApp(TribeVibeApp());
+  runApp(App());
 }
 
-class TribeVibeApp extends StatelessWidget {
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Tribe Vibe',
+      title: 'Flink',
   theme: AppTheme.lightTheme,
   home: const LandingPage(),
       routes: {
@@ -29,6 +29,8 @@ class TribeVibeApp extends StatelessWidget {
         '/events': (context) => EventListScreen(),
         '/event_detail': (context) => EventDetailScreen(eventId: 0), // Placeholder, use push with args
         '/create_event': (context) => CreateEventScreen(),
+        // '/groups': (context) => GroupsScreen(),
+        // '/group_detail': (context) => GroupDetailScreen(groupId: 0), // Placeholder, use push with args
       },
       onGenerateRoute: (settings) {
         if (settings.name == '/suggested-events') {

@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const electricBlue = Color(0xFF1E90FF); // Techy energy for headers, primary buttons, links
-  static const vibrantCoral = Color(0xFFFF6B6B); // CTAs, active states, highlights
-  static const deepCharcoal = Color(0xFF2C2F33); // Text, nav, borders
-  static const softWhite = Color(0xFFF5F6F5); // Backgrounds, light mode
-  static const limeGreen = Color(0xFF32CD32); // Success, tags, hover
-
-  // App-wide aliases for easy migration
-  static const primary = electricBlue;
-  static const secondary = vibrantCoral;
-  static const accent = deepCharcoal;
-  static const background = softWhite;
-  static const card = softWhite;
-  static const button = electricBlue;
-  static const buttonText = Colors.white;
-  static const icon = electricBlue;
-  static const text = deepCharcoal;
-  static const success = limeGreen;
+  // UI Color Guide: Light Theme
+  static const mainBackground = Color(0xFFFAFAFA); // Main Background
+  static const cardBackground = Color(0xFFFFFFFF); // Card Background
+  static const secondaryCard = Color(0xFFF5F5F5); // Secondary Card
+  static const primaryText = Color(0xFF2E2E2E); // Primary Text
+  static const secondaryText = Color(0xFF6B6B6B); // Secondary Text
+  static const accentText = Color(0xFFFFB13B); // Accent Text (Golden Orange)
+  static const primary = Color(0xFFFFB13B); // Brand/Primary CTA (Golden Orange)
+  static const secondary = Color(0xFFFAFAFA); // For backgrounds, etc.
+  static const background = mainBackground;
+  static const card = cardBackground;
+  static const button = primary;
+  static const buttonText = Color(0xFFFFFFFF);
+  static const icon = primary;
 }

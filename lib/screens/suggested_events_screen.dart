@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../widgets/event_card.dart';
 
 class SuggestedEventsScreen extends StatelessWidget {
   final String username;
@@ -18,6 +19,16 @@ class SuggestedEventsScreen extends StatelessWidget {
       'All', 'Tech', 'Business', 'Art', 'Sports', 'Health', 'Social', 'Other'
     ];
     final List<int> distances = [5, 10, 15, 20, 25, 30, 40, 50];
+
+    // Dummy event data for 30 days
+    final List<Map<String, String>> allEvents = List.generate(
+      60,
+      (i) => {
+        'title': 'Event ${i + 1} on ${DateFormat('MMM d').format(next30Days[i ~/ 2])}',
+        'date': DateFormat('EEE, MMM d, yyyy').format(next30Days[i ~/ 2]),
+        'location': 'Location ${(i % 5) + 1}',
+      },
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -40,9 +51,9 @@ class SuggestedEventsScreen extends StatelessWidget {
               ),
             ),
           ),
-          // Column 2: Filters + Suggested Events
+          // Column 2: Filters + Suggested Events (2 per row)
           Expanded(
-            flex: 2,
+            flex: 1,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
               child: Column(
@@ -76,39 +87,20 @@ class SuggestedEventsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: next30Days.length,
+                    child: GridView.builder(
+                      itemCount: allEvents.length,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        childAspectRatio: 1.1,
+                      ),
                       itemBuilder: (context, i) {
-                        final date = next30Days[i];
-                        // Dummy events for demo
-                        final events = List.generate(2, (j) => {
-                          'title': 'Event ${j+1} on ${DateFormat('MMM d').format(date)}',
-                          'time': DateFormat('h:mm a').format(date.add(Duration(hours: j+12))),
-                          'location': 'Location ${j+1}',
-                          'attendees': 10 + j * 5,
-                        });
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(DateFormat('EEEE, MMM d').format(date), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                            ...events.map((e) => Card(
-                              margin: const EdgeInsets.symmetric(vertical: 8),
-                              child: ListTile(
-                                leading: Container(
-                                  width: 48, height: 48,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[300],
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: const Icon(Icons.event, size: 32, color: Colors.grey),
-                                ),
-                                title: Text(e['title'] as String),
-                                subtitle: Text('${e['time']} · ${e['location']}'),
-                                trailing: Text('${e['attendees']} attendees'),
-                              ),
-                            )),
-                            const Divider(),
-                          ],
+                        final e = allEvents[i];
+                        return EventCard(
+                          title: e['title'] ?? '',
+                          date: e['date'] ?? '',
+                          location: e['location'] ?? '',
                         );
                       },
                     ),
@@ -117,20 +109,24 @@ class SuggestedEventsScreen extends StatelessWidget {
               ),
             ),
           ),
-          // Column 3: Profile button
+          // Column 3: Profile button at top right
           Expanded(
-            child: Center(
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.person),
-                label: const Text('Profile'),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  backgroundColor: Colors.teal,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 24, right: 24),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: ElevatedButton.icon(
+                  icon: const Icon(Icons.person),
+                  label: const Text('Profile'),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    backgroundColor: Colors.teal,
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/profile');
+                  },
                 ),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/profile');
-                },
               ),
             ),
           ),
@@ -139,6 +135,8 @@ class SuggestedEventsScreen extends StatelessWidget {
     );
   }
 }
+
+// ...existing _CalendarWidget code...
 
 class _CalendarWidget extends StatelessWidget {
   final int year;
