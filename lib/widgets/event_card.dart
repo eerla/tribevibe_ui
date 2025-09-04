@@ -32,7 +32,7 @@ class EventCard extends StatelessWidget {
               ),
               // Event details
               Flexible(
-                flex: 3,
+                flex: 2,
                 child: Padding(
                   padding: const EdgeInsets.all(12),
                   child: Column(

@@ -25,11 +25,11 @@ class ProfileCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Name:', style: TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold)),
+            Text('Name:', style: TextStyle(color: AppColors.accentText, fontWeight: FontWeight.bold)),
             SizedBox(height: 4),
             Text(name, style: TextStyle(fontSize: 22, color: AppColors.primary)),
             SizedBox(height: 16),
-            Text('Email:', style: TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold)),
+            Text('Email:', style: TextStyle(color: AppColors.accentText, fontWeight: FontWeight.bold)),
             SizedBox(height: 4),
             Text(email, style: TextStyle(fontSize: 18, color: AppColors.primary)),
           ],

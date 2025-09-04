@@ -89,11 +89,11 @@ class _EventListScreenState extends State<EventListScreen> {
                     children: [
                       Text(event.title, style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 18)),
                       const SizedBox(height: 6),
-                      Text('${event.date} • ${event.location}', style: TextStyle(color: AppColors.accent)),
+                      Text('${event.date} • ${event.location}', style: TextStyle(color: AppColors.accentText)),
                       if (event.organizer != null && event.organizer!['name'] != null)
                         Padding(
                           padding: const EdgeInsets.only(top: 4.0),
-                          child: Text('Organizer: ${event.organizer!['name']}', style: TextStyle(color: AppColors.accent, fontSize: 12)),
+                          child: Text('Organizer: ${event.organizer!['name']}', style: TextStyle(color: AppColors.accentText, fontSize: 12)),
                         ),
                     ],
                   ),
