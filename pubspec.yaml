@@ -1,5 +1,5 @@
-name: tribe_vibe  
-description: A Flutter frontend for tribe_vibe
+name: tribevibe_ui
+description: A Flutter frontend for tribevibe
 publish_to: 'none'
 version: 1.0.0+1
 environment:
@@ -13,6 +13,10 @@ dependencies:
   flutter_animate: ^4.5.0
   intl: ^0.20.2
   google_fonts: ^6.1.0
+  responsive_framework: ^1.5.1
+  flutter_screenutil: ^5.8.4
+  styled_widget: any
+  flutter_platform_widgets: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

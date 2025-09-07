@@ -1,81 +1,154 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import '../theme/app_colors.dart';
 
 class EventCard extends StatelessWidget {
   final String title;
   final String date;
   final String location;
-  const EventCard({required this.title, required this.date, required this.location, Key? key}) : super(key: key);
+  final String? imagePath;
+
+  const EventCard({
+    Key? key,
+    required this.title,
+    required this.date,
+    required this.location,
+    this.imagePath,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      elevation: 2,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Column(
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final breakpoint = ResponsiveBreakpoints.of(context);
+    final isMobile = breakpoint.isMobile;
+    final isTablet = breakpoint.isTablet;
+    final cardPadding = isMobile
+        ? EdgeInsets.fromLTRB(10, 10, 10, 8)
+        : isTablet
+            ? EdgeInsets.fromLTRB(16, 16, 16, 12)
+            : EdgeInsets.fromLTRB(20, 20, 20, 16);
+    final titleFontSize = isMobile
+        ? 18.0
+        : isTablet
+            ? 17.0
+            : 16.0;
+    final detailFontSize = isMobile
+        ? 12.0
+        : isTablet
+            ? 14.0
+            : 12.0;
+    return Material(
+      color: isDark ? AppColors.darkCard : AppColors.card,
+      elevation: 4,
+      borderRadius: BorderRadius.circular(20),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: () {},
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: isDark ? Colors.black26 : Colors.grey.withOpacity(0.12),
+                blurRadius: 16,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Event image (expand to fill available vertical space)
               Expanded(
                 flex: 2,
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                  ),
-                  child: const Icon(Icons.image, size: 48, color: Colors.grey),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                  child: imagePath != null
+                      ? Image.asset(
+                          imagePath!,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                        )
+                      : Container(
+                          color: isDark
+                              ? AppColors.primary.withOpacity(0.08)
+                              : AppColors.secondaryCard,
+                          child: Center(
+                            child: Icon(
+                              Icons.event,
+                              size: isMobile ? 32 : 48,
+                              color: isDark ? AppColors.primary : Colors.grey,
+                            ),
+                          ),
+                        ),
                 ),
               ),
-              // Event details
-              Flexible(
-                flex: 2,
+              Expanded(
+                flex: 1,
                 child: Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: cardPadding,
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         title,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Color(0xFF232136),
-                        ),
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: isDark
+                                  ? AppColors.darkPrimaryText
+                                  : AppColors.primaryText,
+                              fontSize: titleFontSize,
+                            ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 6),
-                      Text(
-                        date,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.grey[700],
-                          fontSize: 13,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 6),
+                      SizedBox(height: isMobile ? 4.0 : 8.0),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.location_on, size: 15, color: Colors.grey),
-                          const SizedBox(width: 4),
-                          Flexible(
+                          Icon(Icons.calendar_today,
+                              size: isMobile ? 13.0 : 16.0,
+                              color: isDark
+                                  ? AppColors.darkSecondaryText
+                                  : AppColors.secondaryText),
+                          SizedBox(width: isMobile ? 4.0 : 6.0),
+                          Expanded(
+                            child: Text(
+                              date,
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: isDark
+                                        ? AppColors.darkSecondaryText
+                                        : AppColors.secondaryText,
+                                    fontSize: detailFontSize,
+                                  ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: isMobile ? 2.0 : 6.0),
+                      Row(
+                        children: [
+                          Icon(Icons.location_on,
+                              size: isMobile ? 13.0 : 16.0,
+                              color: isDark
+                                  ? AppColors.darkAccentText
+                                  : AppColors.accentText),
+                          SizedBox(width: isMobile ? 4.0 : 6.0),
+                          Expanded(
                             child: Text(
                               location,
-                              style: TextStyle(
-                                color: Colors.grey[600],
-                                fontSize: 13,
-                              ),
-                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: isDark
+                                        ? AppColors.darkSecondaryText
+                                        : AppColors.secondaryText,
+                                    fontSize: detailFontSize,
+                                  ),
                               maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ],
@@ -85,8 +158,8 @@ class EventCard extends StatelessWidget {
                 ),
               ),
             ],
-          );
-        },
+          ),
+        ),
       ),
     );
   }

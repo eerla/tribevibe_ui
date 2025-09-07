@@ -1,10 +1,15 @@
+import 'package:responsive_framework/responsive_framework.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_colors.dart';
-import './_landing_page_extras.dart';
+import '../theme/app_text.dart';
 import '../widgets/event_card.dart';
 import '../screens/login_screen.dart';
+import '../widgets/LandingAppBar.dart';
+import '../widgets/HeroSection.dart';
 import '../screens/signup_screen.dart';
+
 // Category data model for responsive grid
 class _CategoryData {
   final String label;
@@ -20,518 +25,305 @@ const List<_CategoryData> categories = [
   _CategoryData('Sports & Fitness', Icons.sports_soccer, Colors.blue),
   _CategoryData('Health & Wellbeing', Icons.spa, Colors.teal),
   _CategoryData('Technology', Icons.computer, Colors.pink),
-  _CategoryData('Art & Culture', Icons.theater_comedy, Colors.amber),
   _CategoryData('Games', Icons.casino, Colors.cyan),
 ];
 
 class LandingPage extends StatelessWidget {
+  static const String _heroHeadline = 'This is the modern way to meet people';
+  static const String _heroDescription = 'Find and join events of all types, connect with like-minded people, and share your passions. Flink makes it easy to discover new friendships and experiences in your city or online.';
   const LandingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Row(
-          children: [
-            CircleAvatar(
-              backgroundColor: AppColors.card,
-              child: Icon(Icons.people, color: AppColors.primary),
-            ),
-            const SizedBox(width: 12),
-            Text('Flink', style: GoogleFonts.poppins(
-              color: AppColors.primaryText,
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
-            )),
-          ],
-        ),
-        actions: [
-          _HoverButton(
-            label: 'Log in',
-            onPressed: () => LoginSheet.show(context),
-            icon: null,
-            isSignup: false,
-          ),
-          const SizedBox(width: 8),
-          _HoverButton(
-            label: 'Sign up',
-            onPressed: () => SignupSheet.show(context),
-            icon: Icons.person_add,
-            isSignup: true,
-          ),
-          const SizedBox(width: 16),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 1200),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final isMobile = constraints.maxWidth < 600;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Hero Section
-                    SizedBox(height: isMobile ? 8 : 32),
-                    Container(
-                      margin: const EdgeInsets.only(top: 16),
-                      padding: EdgeInsets.symmetric(
-                        vertical: isMobile ? 24 : 48,
-                        horizontal: isMobile ? 12 : 24,
-                      ),
-                      // Decoration removed for a plain background
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Find your tribe. Join amazing events.',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.poppins(
-                              color: AppColors.primaryText,
-                              fontSize: isMobile ? 22 : 32,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1.2,
-                            ),
-                          ),
-                          SizedBox(height: isMobile ? 8 : 16),
-                          Text(
-                            'Discover and join local groups, meet new people, and explore your interests.',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.inter(
-                              color: AppColors.secondaryText,
-                              fontSize: isMobile ? 14 : 18,
-                            ),
-                          ),
-                          SizedBox(height: isMobile ? 16 : 32),
-                          Row(
+    return ResponsiveBreakpoints.builder(
+      breakpoints: [
+        const Breakpoint(start: 0, end: 450, name: MOBILE),
+        const Breakpoint(start: 451, end: 800, name: TABLET),
+        const Breakpoint(start: 801, end: 1920, name: DESKTOP),
+        const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
+      ],
+      child: Scaffold(
+        appBar: const LandingAppBar(),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body: SingleChildScrollView(
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1200),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final breakpoints = ResponsiveBreakpoints.of(context);
+                  final isMobile = breakpoints.isMobile;
+                  final isTablet = breakpoints.isTablet;
+                  final isDesktop = breakpoints.isDesktop;
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if (isMobile) ...[
+                        HeroSection(
+                          headline: _heroHeadline,
+                          description: _heroDescription,
+                          showSearchBar: true,
+                        ),
+                        const SizedBox(height: 32),
+                      ] else ...[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Expanded(
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                    hintText: 'Search events, groups, or interests',
-                                    filled: true,
-                                    fillColor: AppColors.card,
-                                    prefixIcon: Icon(Icons.search, color: AppColors.primary),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                      borderSide: BorderSide.none,
+                              // Search bar row
+                              HeroSection(
+                                headline: '',
+                                description: '',
+                                showSearchBar: true,
+                                padding: const EdgeInsets.only(bottom: 32),
+                              ),
+                              // Hero text and image row
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: HeroSection(
+                                      headline: _heroHeadline,
+                                      description: _heroDescription,
+                                      showSearchBar: false,
+                                      padding: const EdgeInsets.only(right: 32),
                                     ),
                                   ),
-                                ),
-                              ),
-                              SizedBox(width: isMobile ? 8 : 12),
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.button,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                                ),
-                                child: const Text('Search', style: TextStyle(color: AppColors.buttonText)),
+                                  const SizedBox(width: 40),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Center(
+                                      child: Container(
+                                        width: 440,
+                                        height: 360,
+                                        decoration: BoxDecoration(
+                                          color: AppColors.secondary.withOpacity(0.08),
+                                          borderRadius: BorderRadius.circular(48),
+                                          image: const DecorationImage(
+                                            image: AssetImage('assets/hero.jpg'),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-                    // Modern Two-Column Intro Section
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: isMobile ? 16 : 40,
-                        horizontal: isMobile ? 8 : 16,
-                      ),
-                      child: LayoutBuilder(
-                        builder: (context, constraints) {
-                          bool isWide = constraints.maxWidth > 700;
-                          if (isWide) {
-                            return Flex(
-                              direction: Axis.horizontal,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                // Left: Text and Button
-                                Flexible(
-                                  flex: 2,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'This is the modern way to meet people',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: isMobile ? 18 : 28,
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColors.primary,
-                                          letterSpacing: 1.1,
-                                        ),
-                                        textAlign: TextAlign.left,
-                                      ),
-                                      SizedBox(height: isMobile ? 10 : 18),
-                                      Text(
-                                        'Find and join events of all types, connect with like-minded people, and share your passions. Flink makes it easy to discover new friendships and experiences in your city or online.',
-                                        style: GoogleFonts.inter(
-                                          fontSize: isMobile ? 13 : 17,
-                                          color: AppColors.secondaryText,
-                                        ),
-                                        textAlign: TextAlign.left,
-                                      ),
-                                      SizedBox(height: isMobile ? 16 : 28),
-                                      Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: ElevatedButton(
-                                          onPressed: () => SignupSheet.show(context),
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: AppColors.button,
-                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                                            padding: EdgeInsets.symmetric(horizontal: isMobile ? 18 : 32, vertical: isMobile ? 10 : 16),
-                                          ),
-                                          child: Text('Join Flink', style: GoogleFonts.inter(
-                                            color: AppColors.buttonText,
-                                            fontSize: isMobile ? 14 : 18,
-                                          )),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(width: 40),
-                                // Right: Hero Image (desktop only)
-                                Flexible(
-                                  flex: 2,
-                                  child: Center(
-                                    child: Container(
-                                      width: 440, // doubled from 220
-                                      height: 360, // doubled from 180
-                                      decoration: BoxDecoration(
-                                        color: AppColors.secondary.withOpacity(0.08),
-                                        borderRadius: BorderRadius.circular(48), // doubled from 24
-                                        image: DecorationImage(
-                                          image: AssetImage('assets/hero.jpg'),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            );
-                          } else {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                // Left: Text and Button
-                                Text(
-                                  'This is the modern way to meet people',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: isMobile ? 18 : 28,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.primary,
-                                    letterSpacing: 1.1,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                SizedBox(height: isMobile ? 10 : 18),
-                                Text(
-                                  'Find and join events of all types, connect with like-minded people, and share your passions. Flink makes it easy to discover new friendships and experiences in your city or online.',
-                                  style: GoogleFonts.inter(
-                                    fontSize: isMobile ? 13 : 17,
-                                    color: AppColors.secondaryText,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                SizedBox(height: isMobile ? 16 : 28),
-                                Align(
-                                  alignment: Alignment.center,
-                                  child: ElevatedButton(
-                                    onPressed: () => SignupSheet.show(context),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: AppColors.button,
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                                      padding: EdgeInsets.symmetric(horizontal: isMobile ? 18 : 32, vertical: isMobile ? 10 : 16),
-                                    ),
-                                    child: Text('Join Flink', style: GoogleFonts.inter(
-                                      color: AppColors.buttonText,
-                                      fontSize: isMobile ? 14 : 18,
-                                    )),
-                                  ),
-                                ),
-                                SizedBox(height: isMobile ? 16 : 40),
-                                // No image in mobile view
-                              ],
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                // Popular Cities & How Flink Works Side by Side
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    bool isWide = constraints.maxWidth > 900;
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 8),
-                      child: SizedBox(
-                        width: constraints.maxWidth,
-                        child: Flex(
-                          direction: isWide ? Axis.horizontal : Axis.vertical,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // Popular Cities
-                            Container(
-                              width: isWide ? (constraints.maxWidth / 2) - 24 : null,
-                              margin: EdgeInsets.only(right: isWide ? 32 : 0, bottom: isWide ? 0 : 32),
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                              decoration: BoxDecoration(
-                                color: AppColors.primary.withOpacity(0.01), // light orangish
-                                borderRadius: BorderRadius.circular(18),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: AppColors.primary.withOpacity(0.12),
-                                    blurRadius: 16,
-                                    offset: Offset(0, 6),
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const Text('Popular cities on Flink', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    "Looking for fun things to do near you? See what Flink organizers are planning in cities around the country.",
-                                    style: TextStyle(color: AppColors.secondaryText, fontSize: 15),
-                                  ),
-                                  const SizedBox(height: 24),
-                                  SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Row(
-                                      children: [
-                                        CityCircle(name: 'Hyderabad', imageUrl: '/assets/hyd.jpg', isBold: true),
-                                        CityCircle(name: 'Bangalore', imageUrl: '/assets/blr.jpg', isBold: true),
-                                        CityCircle(name: 'New Delhi', imageUrl: '/assets/nd.jpg', isBold: true),
-                                        CityCircle(name: 'Chennai', imageUrl: '/assets/che.jpg', isBold: true),
-                                        CityCircle(name: 'Kolkata', imageUrl: '/assets/kol.png', isBold: true),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            // How Flink Works
-                            Container(
-                              width: isWide ? (constraints.maxWidth / 2) - 24 : null,
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const Text('How Flink works', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-                                  const SizedBox(height: 18),
-                                  HowItWorksCard(
-                                    icon: Icons.search,
-                                    title: 'Discover events and groups',
-                                    description: "See who's hosting local events for all the things you love",
-                                    linkText: 'Search events and groups',
-                                    onTap: () {},
-                                  ),
-                                  const SizedBox(height: 18),
-                                  HowItWorksCard(
-                                    icon: Icons.add,
-                                    title: 'Start a group to host events',
-                                    description: 'Create your own Flink group, and draw from a community of millions',
-                                    linkText: 'Start a group',
-                                    onTap: () {},
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
                         ),
-                      ),
+                      ],
+                      // Add gap after hero section
+                      const SizedBox(height: 40),
+                        // Responsive Featured Events Section
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Explore Featured Events',
+                                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).brightness == Brightness.dark
+                                      ? Colors.white
+                                      : AppColors.primary,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              LayoutBuilder(
+                                builder: (context, constraints) {
+                                  int crossAxisCount = constraints.maxWidth > 900
+                                      ? 4
+                                      : constraints.maxWidth > 600
+                                          ? 2
+                                          : 1;
+                                  final List<String> eventTitles = [
+                                    'Flutter Community Meetup',
+                                    'Yoga in the Park',
+                                    'Startup Pitch Night',
+                                    'Art & Wine Evening',
+                                  ];
+                                  final List<String> eventDates = [
+                                    'Sep 10, 2025 · 6:00 PM',
+                                    'Sep 12, 2025 · 8:00 AM',
+                                    'Sep 15, 2025 · 7:30 PM',
+                                    'Sep 18, 2025 · 5:00 PM',
+                                  ];
+                                  final List<String> eventLocations = [
+                                    'Downtown Community Hall',
+                                    'Central Park',
+                                    'Tech Hub Auditorium',
+                                    'Vineyard Art Space',
+                                  ];
+                                  return GridView.builder(
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: eventTitles.length,
+                                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: crossAxisCount,
+                                      crossAxisSpacing: 16,
+                                      mainAxisSpacing: 16,
+                                      childAspectRatio: isDesktop ? 0.75 : 1.0,
+                                    ),
+                                    itemBuilder: (context, index) {
+                                      // Add fade-in animation using AnimatedOpacity
+                                      return TweenAnimationBuilder<double>(
+                                        tween: Tween(begin: 0, end: 1),
+                                        duration: Duration(milliseconds: 400 + index * 120),
+                                        builder: (context, value, child) {
+                                          return Opacity(
+                                            opacity: value,
+                                            child: Transform.scale(
+                                              scale: 0.98 + value * 0.02,
+                                              child: EventCard(
+                                                title: eventTitles[index],
+                                                date: eventDates[index],
+                                                location: eventLocations[index],
+                                                imagePath: index == 0 ? 'assets/coffee.jpg' : null, // Show image for first event
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Add gap after featured events section
+                        const SizedBox(height: 40),
+                        // Explore Categories Section
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Explore Top Categories',
+                                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).brightness == Brightness.dark
+                                      ? Colors.white
+                                      : AppColors.primary,
+                                  fontSize: ResponsiveValue<double>(
+                                    context,
+                                    defaultValue: 22,
+                                    conditionalValues: [
+                                      Condition.smallerThan(name: TABLET, value: 18),
+                                      Condition.largerThan(name: DESKTOP, value: 26),
+                                    ],
+                                  ).value,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              LayoutBuilder(
+                                builder: (context, constraints) {
+                                  final breakpoints = ResponsiveBreakpoints.of(context);
+                                  int crossAxisCount = breakpoints.isMobile
+                                      ? 2
+                                      : constraints.maxWidth > 900
+                                          ? 4
+                                          : constraints.maxWidth > 600
+                                              ? 2
+                                              : 1;
+                                  double cardAspect = constraints.maxWidth > 900
+                                      ? 1.5
+                                      : constraints.maxWidth > 600
+                                          ? 1.7
+                                          : 1.0;
+                                  return GridView.builder(
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: categories.length,
+                                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: crossAxisCount,
+                                      crossAxisSpacing: 16,
+                                      mainAxisSpacing: 16,
+                                      childAspectRatio: cardAspect,
+                                    ),
+                                    itemBuilder: (context, index) {
+                                      final cat = categories[index];
+                                      return TweenAnimationBuilder<double>(
+                                        tween: Tween(begin: 0, end: 1),
+                                        duration: Duration(milliseconds: 400 + index * 100),
+                                        builder: (context, value, child) {
+                                          return Opacity(
+                                            opacity: value,
+                                            child: Transform.scale(
+                                              scale: 0.98 + value * 0.02,
+                                              child: Card(
+                                                elevation: 0,
+                                                color: Theme.of(context).brightness == Brightness.dark
+                                                    ? cat.color.withOpacity(0.18)
+                                                    : cat.color.withOpacity(0.08),
+                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                                child: Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                    vertical: ResponsiveValue<double>(context, defaultValue: 24, conditionalValues: [Condition.smallerThan(name: TABLET, value: 16)]).value!,
+                                                    horizontal: ResponsiveValue<double>(context, defaultValue: 16, conditionalValues: [Condition.smallerThan(name: TABLET, value: 10)]).value!,
+                                                  ),
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                          color: cat.color.withOpacity(0.18),
+                                                          shape: BoxShape.circle,
+                                                        ),
+                                                        padding: const EdgeInsets.all(12),
+                                                        child: Icon(
+                                                          cat.icon,
+                                                          color: cat.color,
+                                                          size: ResponsiveValue<double>(context, defaultValue: 36, conditionalValues: [Condition.smallerThan(name: TABLET, value: 28)]).value,
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 12),
+                                                      Text(
+                                                        cat.label,
+                                                        textAlign: TextAlign.center,
+                                                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                                          fontWeight: FontWeight.bold,
+                                                          color: Theme.of(context).brightness == Brightness.dark
+                                                              ? Colors.white
+                                                              : AppColors.primaryText,
+                                                          fontSize: ResponsiveValue<double>(context, defaultValue: 16, conditionalValues: [Condition.smallerThan(name: TABLET, value: 13)]).value,
+                                                        ),
+                                                        maxLines: 2,
+                                                        overflow: TextOverflow.ellipsis,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+
+                      ],
                     );
                   },
-                ),
-                // Explore Featured Events
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Text('Explore top categories', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 12),
-                      LayoutBuilder(
-                        builder: (context, constraints) {
-                          int crossAxisCount = constraints.maxWidth > 900
-                              ? 4
-                              : constraints.maxWidth > 600
-                                  ? 2
-                                  : 1;
-                          return GridView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: categories.length,
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: crossAxisCount,
-                              crossAxisSpacing: 16,
-                              mainAxisSpacing: 16,
-                              childAspectRatio: 1.8, // Even more vertical space
-                            ),
-                            itemBuilder: (context, index) {
-                              final cat = categories[index];
-                              return SizedBox(
-                                child: Card(
-                                  color: Colors.grey[100],
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                                  child: Center(
-                                    child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(cat.icon, color: cat.color, size: 36),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                      cat.label,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primaryText),
-                                      ),
-                                    ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                // Responsive Featured Events Section
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Text('Featured Events', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 12),
-                      LayoutBuilder(
-                        builder: (context, constraints) {
-                          int crossAxisCount = constraints.maxWidth > 900
-                              ? 4
-                              : constraints.maxWidth > 600
-                                  ? 2
-                                  : 1;
-                          // Define event data arrays here
-                          final List<String> eventTitles = [
-                            'Flutter Community Meetup',
-                            'Yoga in the Park',
-                            'Startup Pitch Night',
-                            'Art & Wine Evening',
-                          ];
-                          final List<String> eventDates = [
-                            'Sep 10, 2025 · 6:00 PM',
-                            'Sep 12, 2025 · 8:00 AM',
-                            'Sep 15, 2025 · 7:30 PM',
-                            'Sep 18, 2025 · 5:00 PM',
-                          ];
-                          final List<String> eventLocations = [
-                            'Downtown Community Hall',
-                            'Central Park',
-                            'Tech Hub Auditorium',
-                            'Vineyard Art Space',
-                          ];
-                          return GridView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: eventTitles.length,
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: crossAxisCount,
-                              crossAxisSpacing: 16,
-                              mainAxisSpacing: 16,
-                              childAspectRatio: 1.0,
-                            ),
-                            itemBuilder: (context, index) {
-                              return EventCard(
-                                title: eventTitles[index],
-                                date: eventDates[index],
-                                location: eventLocations[index],
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                // Call to Action Section
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
-                  child: Column(
-                    children: [
-                      Text(
-                        'Ready to start your own group or event?',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.primary),
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                          elevation: 6,
-                          shadowColor: AppColors.primary.withOpacity(0.18),
-                        ),
-                        child: const Text('Start a Group', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                      ),
-                    ],
-                  ),
-                ),
-                // Footer (full width)
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    width: double.infinity,
-                    color: const Color(0xFF232323), // Charcoal black
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text('Flink', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20)),
-                          const SizedBox(height: 12),
-                          Wrap(
-                            alignment: WrapAlignment.center,
-                            spacing: 24,
-                            children: [
-                              _FooterLink(label: 'About'),
-                              _FooterLink(label: 'Careers'),
-                              _FooterLink(label: 'Blog'),
-                              _FooterLink(label: 'Help'),
-                              _FooterLink(label: 'Privacy'),
-                              _FooterLink(label: 'Terms'),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          Text('© 2025 Flink. All rights reserved.', style: TextStyle(color: Colors.white70)),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            );
-              }
+              ),
+            ),
           ),
         ),
       ),
-    ),
     );
+    }
   }
-}
 
 // Footer link widget for footer section
 class _FooterLink extends StatelessWidget {

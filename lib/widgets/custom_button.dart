@@ -6,6 +6,7 @@ class CustomButton extends StatelessWidget {
   final VoidCallback onPressed;
   final Color color;
   final bool isFullWidth;
+  final double? fontSize;
 
   const CustomButton({
     super.key,
@@ -13,6 +14,7 @@ class CustomButton extends StatelessWidget {
     required this.onPressed,
     required this.color,
     this.isFullWidth = true,
+    this.fontSize,
   });
 
   @override
@@ -30,8 +32,8 @@ class CustomButton extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           text,
-          style: const TextStyle(
-            fontSize: 18,
+          style: TextStyle(
+            fontSize: fontSize ?? 18,
             color: Colors.white,
             fontWeight: FontWeight.bold,
             letterSpacing: 1.1,
