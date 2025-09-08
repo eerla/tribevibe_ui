@@ -12,9 +12,9 @@ class LandingAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-  final breakpoints = ResponsiveBreakpoints.of(context);
-  final isMobile = breakpoints.isMobile;
-  final isTablet = breakpoints.isTablet;
+    final breakpoints = ResponsiveBreakpoints.of(context);
+    final isMobile = breakpoints.isMobile;
+    final isTablet = breakpoints.isTablet;
     double fontSize;
     double horizontalPadding;
     double iconSize;
@@ -36,7 +36,7 @@ class LandingAppBar extends StatelessWidget implements PreferredSizeWidget {
       gap2 = 6;
       gap3 = 12;
     } else {
-      fontSize = 18;
+      fontSize = 22;
       horizontalPadding = 20;
       iconSize = 20;
       gap1 = 6;
@@ -51,25 +51,25 @@ class LandingAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       child: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: isMobile ? 4 : 0),
+          padding: EdgeInsets.symmetric(
+              horizontal: horizontalPadding, vertical: isMobile ? 4 : 0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 600),
-                    curve: Curves.easeInOut,
-                    child: CircleAvatar(
-                      backgroundColor: AppColors.card,
-                      child: Icon(Icons.people, color: AppColors.primary, size: iconSize),
-                    ),
+                  Image.asset(
+                    'assets/logo1.png',
+                    height: 48, // adjust as needed
+                    fit: BoxFit.contain,
                   ),
                   SizedBox(width: gap1),
-                  Text('Flink', style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: AppColors.primaryText,
-                    fontSize: fontSize,
-                  )),
+                  Text('link',
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                color: AppColors.primaryText,
+                                fontSize: fontSize,
+                              )),
                 ],
               ),
               Row(
@@ -82,7 +82,8 @@ class LandingAppBar extends StatelessWidget implements PreferredSizeWidget {
                   TextButton.icon(
                     onPressed: () => SignupSheet.show(context),
                     icon: Icon(Icons.person_add, size: iconSize),
-                    label: Text('Sign up', style: TextStyle(fontSize: fontSize)),
+                    label:
+                        Text('Sign up', style: TextStyle(fontSize: fontSize)),
                   ),
                   SizedBox(width: gap3),
                 ],
