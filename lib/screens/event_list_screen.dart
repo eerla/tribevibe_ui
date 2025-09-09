@@ -3,7 +3,7 @@ import '../models/event.dart';
 import '../services/event_service.dart';
 import '../theme/app_colors.dart';
 import '../widgets/modern_app_bar.dart';
-import '../widgets/modern_card.dart';
+import '../widgets/event_card.dart';
 import 'event_detail_screen.dart';
 import 'create_event_screen.dart';
 
@@ -70,34 +70,52 @@ class _EventListScreenState extends State<EventListScreen> {
             return Center(child: Text('No events found'));
           }
           final events = snapshot.data!;
-          return ListView.builder(
-            itemCount: events.length,
-            itemBuilder: (context, index) {
-              final event = events[index];
-              return ModernCard(
-                animationDelay: Duration(milliseconds: 80 * index),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => EventDetailScreen(eventId: event.id!)),
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              int crossAxisCount = constraints.maxWidth > 900
+                  ? 3
+                  : constraints.maxWidth > 600
+                      ? 2
+                      : 1;
+              return GridView.builder(
+                padding: const EdgeInsets.all(16),
+                shrinkWrap: true,
+                physics: const AlwaysScrollableScrollPhysics(),
+                itemCount: events.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: crossAxisCount,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  childAspectRatio: constraints.maxWidth > 900 ? 1.2 : 1.0,
+                ),
+                itemBuilder: (context, index) {
+                  final event = events[index];
+                  return TweenAnimationBuilder<double>(
+                    tween: Tween(begin: 0, end: 1),
+                    duration: Duration(milliseconds: 400 + index * 100),
+                    builder: (context, value, child) {
+                      return Opacity(
+                        opacity: value,
+                        child: Transform.scale(
+                          scale: 0.98 + value * 0.02,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => EventDetailScreen(eventId: event.id!)),
+                              );
+                            },
+                            child: EventCard(
+                              title: event.title,
+                              date: event.date,
+                              location: event.location,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   );
                 },
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(event.title, style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 18)),
-                      const SizedBox(height: 6),
-                      Text('${event.date} • ${event.location}', style: TextStyle(color: AppColors.accentText)),
-                      if (event.organizer != null && event.organizer!['name'] != null)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4.0),
-                          child: Text('Organizer: ${event.organizer!['name']}', style: TextStyle(color: AppColors.accentText, fontSize: 12)),
-                        ),
-                    ],
-                  ),
-                ),
               );
             },
           );

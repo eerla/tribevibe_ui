@@ -1,8 +1,10 @@
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/custom_button.dart';
 import '../theme/app_colors.dart';
+import '../screens/login_screen.dart';
 
 class SignupSheet extends StatefulWidget {
   const SignupSheet({Key? key}) : super(key: key);
@@ -37,113 +39,167 @@ class _SignupSheetState extends State<SignupSheet> {
   }
 
   void _signup() async {
-    setState(() { isLoading = true; error = null; });
+    setState(() {
+      isLoading = true;
+      error = null;
+    });
     final success = await AuthService().register(
       _nameController.text,
       _emailController.text,
       _passwordController.text,
     );
-    setState(() { isLoading = false; });
+    setState(() {
+      isLoading = false;
+    });
     if (success) {
       Navigator.pop(context); // Close the sheet
       // Optionally, show a success message or trigger login sheet
     } else {
-      setState(() { error = 'Signup failed'; });
+      setState(() {
+        error = 'Signup failed';
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final breakpoints = ResponsiveBreakpoints.of(context);
+    final isDesktop = breakpoints.isDesktop || breakpoints.isTablet;
+    final double maxWidth = isDesktop ? 750 : 600;
+    final double horizontalPadding = isDesktop ? 48 : 32;
+    final double verticalPadding = isDesktop ? 40 : 24;
+    final double titleFontSize = isDesktop ? 28 : 32;
+    final double fieldFontSize = isDesktop ? 18 : 22;
+    final double buttonFontSize = isDesktop ? 18 : 22;
+    final double textFontSize = isDesktop ? 16 : 18;
+    final double spacingLarge = isDesktop ? 24 : 32;
+    final double spacingMedium = isDesktop ? 16 : 24;
+    final double spacingSmall = isDesktop ? 12 : 16;
+
     return DraggableScrollableSheet(
-      initialChildSize: 0.7,
-      minChildSize: 0.5,
-      maxChildSize: 0.95,
+      initialChildSize: isDesktop ? 0.8 : 0.7,
+      minChildSize: isDesktop ? 0.6 : 0.5,
+      maxChildSize: isDesktop ? 0.95 : 0.95,
       expand: false,
       builder: (context, scrollController) {
-        return Container(
-          decoration: BoxDecoration(
-            color: AppColors.background,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-          ),
-          child: SingleChildScrollView(
-            controller: scrollController,
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: 32, right: 32, top: 24,
-                bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+        return Material(
+          color: Colors.transparent,
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              constraints: BoxConstraints(maxWidth: maxWidth),
+              decoration: BoxDecoration(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.grey[900]
+                    : AppColors.background,
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(24)),
+                boxShadow: isDesktop
+                    ? [
+                        BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 32,
+                            spreadRadius: 2)
+                      ]
+                    : [],
               ),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      child: Container(
-                        width: 40,
-                        height: 4,
-                        margin: const EdgeInsets.only(bottom: 16),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      ),
-                    ),
-                    Text(
-                      'Create Account',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 32),
-                    CustomTextField(
-                      label: 'Name',
-                      controller: _nameController,
-                    ),
-                    SizedBox(height: 16),
-                    CustomTextField(
-                      label: 'Email',
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    SizedBox(height: 16),
-                    CustomTextField(
-                      label: 'Password',
-                      controller: _passwordController,
-                      obscureText: true,
-                    ),
-                    SizedBox(height: 24),
-                    if (error != null)
-                      Text(
-                        error!,
-                        style: TextStyle(color: Color(0xFFC9ADA7), fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                      ),
-                    if (error != null) SizedBox(height: 12),
-                    isLoading
-                        ? const Center(child: CircularProgressIndicator())
-                        : CustomButton(
-                            text: 'Sign Up',
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                _signup();
-                              }
-                            },
-                            color: AppColors.button,
+              child: SingleChildScrollView(
+                controller: scrollController,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: horizontalPadding,
+                    right: horizontalPadding,
+                    top: verticalPadding,
+                    bottom: MediaQuery.of(context).viewInsets.bottom +
+                        verticalPadding,
+                  ),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          child: Container(
+                            width: 40,
+                            height: 4,
+                            margin: EdgeInsets.only(bottom: spacingSmall),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(2),
+                            ),
                           ),
-                    SizedBox(height: 16),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context); // Close signup sheet
-                        // Optionally, show login sheet here
-                      },
-                      child: const Text('Already have an account? Login'),
+                        ),
+                        Text(
+                          'Create Account',
+                          style: TextStyle(
+                            fontSize: titleFontSize,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: spacingLarge),
+                        CustomTextField(
+                          label: 'Name',
+                          controller: _nameController,
+                          fontSize: fieldFontSize,
+                        ),
+                        SizedBox(height: spacingMedium),
+                        CustomTextField(
+                          label: 'Email',
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          fontSize: fieldFontSize,
+                        ),
+                        SizedBox(height: spacingMedium),
+                        CustomTextField(
+                          label: 'Password',
+                          controller: _passwordController,
+                          obscureText: true,
+                          fontSize: fieldFontSize,
+                        ),
+                        SizedBox(height: spacingLarge),
+                        if (error != null)
+                          Text(
+                            error!,
+                            style: TextStyle(
+                                color: Color(0xFFC9ADA7),
+                                fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                          ),
+                        if (error != null) SizedBox(height: spacingSmall),
+                        isLoading
+                            ? const Center(child: CircularProgressIndicator())
+                            : CustomButton(
+                                text: 'Sign Up',
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    _signup();
+                                  }
+                                },
+                                color: AppColors.button,
+                                fontSize: buttonFontSize,
+                              ),
+                        SizedBox(height: spacingMedium),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context, rootNavigator: true)
+                                .pop(); // Close signup sheet
+                            Future.microtask(() {
+                              LoginSheet.show(
+                                  context); // Use the root context from the main widget tree
+                            });
+                          },
+                          child: Text(
+                            'Already have an account? Login',
+                            style: TextStyle(fontSize: textFontSize),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -153,4 +209,3 @@ class _SignupSheetState extends State<SignupSheet> {
     );
   }
 }
-

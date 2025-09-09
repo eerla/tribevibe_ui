@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../widgets/event_card.dart';
+import '../theme/app_colors.dart';
 
 class SuggestedEventsScreen extends StatelessWidget {
   final String username;
@@ -31,9 +32,12 @@ class SuggestedEventsScreen extends StatelessWidget {
     );
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Suggested Events'),
-        backgroundColor: Colors.teal,
+        title: const Text('Suggested Events', style: TextStyle(color: AppColors.primaryText)),
+        backgroundColor: AppColors.cardBackground,
+        elevation: 1,
+        iconTheme: const IconThemeData(color: AppColors.primary),
       ),
       body: Row(
         children: [
@@ -44,7 +48,7 @@ class SuggestedEventsScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Hello, $username!', style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+                  Text('Hello, $username!', style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: AppColors.primaryText)),
                   const SizedBox(height: 24),
                   _CalendarWidget(year: now.year, month: now.month, days: daysInMonth),
                 ],
@@ -63,14 +67,20 @@ class SuggestedEventsScreen extends StatelessWidget {
                     children: [
                       DropdownButton<String>(
                         value: categories[0],
-                        items: categories.map((cat) => DropdownMenuItem(value: cat, child: Text(cat))).toList(),
+                        items: categories.map((cat) => DropdownMenuItem(value: cat, child: Text(cat, style: const TextStyle(color: AppColors.primaryText)))).toList(),
                         onChanged: (v) {},
+                        dropdownColor: AppColors.cardBackground,
+                        style: const TextStyle(color: AppColors.primaryText),
+                        iconEnabledColor: AppColors.primary,
                       ),
                       const SizedBox(width: 16),
                       DropdownButton<int>(
                         value: distances[0],
-                        items: distances.map((d) => DropdownMenuItem(value: d, child: Text('$d km'))).toList(),
+                        items: distances.map((d) => DropdownMenuItem(value: d, child: Text('$d km', style: const TextStyle(color: AppColors.primaryText)))).toList(),
                         onChanged: (v) {},
+                        dropdownColor: AppColors.cardBackground,
+                        style: const TextStyle(color: AppColors.primaryText),
+                        iconEnabledColor: AppColors.primary,
                       ),
                       const SizedBox(width: 16),
                       SizedBox(
@@ -78,9 +88,13 @@ class SuggestedEventsScreen extends StatelessWidget {
                         child: TextField(
                           decoration: InputDecoration(
                             hintText: 'Search by date',
+                            hintStyle: const TextStyle(color: AppColors.secondaryText),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                            prefixIcon: const Icon(Icons.calendar_today),
+                            prefixIcon: const Icon(Icons.calendar_today, color: AppColors.primary),
+                            filled: true,
+                            fillColor: AppColors.secondaryCard,
                           ),
+                          style: const TextStyle(color: AppColors.primaryText),
                         ),
                       ),
                     ],
@@ -97,10 +111,15 @@ class SuggestedEventsScreen extends StatelessWidget {
                       ),
                       itemBuilder: (context, i) {
                         final e = allEvents[i];
-                        return EventCard(
-                          title: e['title'] ?? '',
-                          date: e['date'] ?? '',
-                          location: e['location'] ?? '',
+                        return Card(
+                          color: AppColors.cardBackground,
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          child: EventCard(
+                            title: e['title'] ?? '',
+                            date: e['date'] ?? '',
+                            location: e['location'] ?? '',
+                          ),
                         );
                       },
                     ),
@@ -116,12 +135,14 @@ class SuggestedEventsScreen extends StatelessWidget {
               child: Align(
                 alignment: Alignment.topRight,
                 child: ElevatedButton.icon(
-                  icon: const Icon(Icons.person),
-                  label: const Text('Profile'),
+                  icon: const Icon(Icons.person, color: Colors.white),
+                  label: const Text('Profile', style: TextStyle(color: Colors.white)),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    backgroundColor: Colors.teal,
+                    backgroundColor: AppColors.primary,
+                    elevation: 4,
+                    shadowColor: AppColors.primary.withOpacity(0.18),
                   ),
                   onPressed: () {
                     Navigator.pushNamed(context, '/profile');
@@ -149,6 +170,7 @@ class _CalendarWidget extends StatelessWidget {
     final now = DateTime.now();
     return Card(
       elevation: 2,
+      color: AppColors.cardBackground,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -156,16 +178,16 @@ class _CalendarWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(icon: const Icon(Icons.chevron_left), onPressed: () {}),
-                Text(DateFormat('MMMM yyyy').format(DateTime(year, month)), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                IconButton(icon: const Icon(Icons.chevron_right), onPressed: () {}),
+                IconButton(icon: const Icon(Icons.chevron_left, color: AppColors.primary), onPressed: () {}),
+                Text(DateFormat('MMMM yyyy').format(DateTime(year, month)), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.primaryText)),
+                IconButton(icon: const Icon(Icons.chevron_right, color: AppColors.primary), onPressed: () {}),
               ],
             ),
             const SizedBox(height: 8),
             Table(
               children: [
                 TableRow(
-                  children: List.generate(7, (i) => Center(child: Text(['Su','Mo','Tu','We','Th','Fr','Sa'][i], style: const TextStyle(fontWeight: FontWeight.bold))))
+                  children: List.generate(7, (i) => Center(child: Text(['Su','Mo','Tu','We','Th','Fr','Sa'][i], style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.secondaryText))))
                 ),
                 ...List.generate((days/7).ceil(), (week) {
                   return TableRow(
@@ -177,8 +199,8 @@ class _CalendarWidget extends StatelessWidget {
                         padding: const EdgeInsets.all(4),
                         child: CircleAvatar(
                           radius: 16,
-                          backgroundColor: isToday ? Colors.teal : Colors.grey[200],
-                          child: Text('$d', style: TextStyle(color: isToday ? Colors.white : Colors.black)),
+                          backgroundColor: isToday ? AppColors.primary : AppColors.secondaryCard,
+                          child: Text('$d', style: TextStyle(color: isToday ? Colors.white : AppColors.primaryText)),
                         ),
                       );
                     }),
@@ -190,9 +212,30 @@ class _CalendarWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                OutlinedButton(onPressed: () {}, child: const Text('This week')),
-                OutlinedButton(onPressed: () {}, child: const Text('This weekend')),
-                OutlinedButton(onPressed: () {}, child: const Text('Next week')),
+                OutlinedButton(
+                  onPressed: () {},
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.primary,
+                    side: const BorderSide(color: AppColors.primary),
+                  ),
+                  child: const Text('This week'),
+                ),
+                OutlinedButton(
+                  onPressed: () {},
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.primary,
+                    side: const BorderSide(color: AppColors.primary),
+                  ),
+                  child: const Text('This weekend'),
+                ),
+                OutlinedButton(
+                  onPressed: () {},
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.primary,
+                    side: const BorderSide(color: AppColors.primary),
+                  ),
+                  child: const Text('Next week'),
+                ),
               ],
             ),
           ],
