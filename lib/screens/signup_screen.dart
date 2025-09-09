@@ -4,6 +4,7 @@ import '../services/auth_service.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/custom_button.dart';
 import '../theme/app_colors.dart';
+import '../screens/login_screen.dart';
 
 class SignupSheet extends StatefulWidget {
   const SignupSheet({Key? key}) : super(key: key);
@@ -38,18 +39,25 @@ class _SignupSheetState extends State<SignupSheet> {
   }
 
   void _signup() async {
-    setState(() { isLoading = true; error = null; });
+    setState(() {
+      isLoading = true;
+      error = null;
+    });
     final success = await AuthService().register(
       _nameController.text,
       _emailController.text,
       _passwordController.text,
     );
-    setState(() { isLoading = false; });
+    setState(() {
+      isLoading = false;
+    });
     if (success) {
       Navigator.pop(context); // Close the sheet
       // Optionally, show a success message or trigger login sheet
     } else {
-      setState(() { error = 'Signup failed'; });
+      setState(() {
+        error = 'Signup failed';
+      });
     }
   }
 
@@ -57,7 +65,7 @@ class _SignupSheetState extends State<SignupSheet> {
   Widget build(BuildContext context) {
     final breakpoints = ResponsiveBreakpoints.of(context);
     final isDesktop = breakpoints.isDesktop || breakpoints.isTablet;
-    final double maxWidth = isDesktop ? 420 : 600;
+    final double maxWidth = isDesktop ? 750 : 600;
     final double horizontalPadding = isDesktop ? 48 : 32;
     final double verticalPadding = isDesktop ? 40 : 24;
     final double titleFontSize = isDesktop ? 28 : 32;
@@ -76,14 +84,23 @@ class _SignupSheetState extends State<SignupSheet> {
       builder: (context, scrollController) {
         return Material(
           color: Colors.transparent,
-          child: Center(
+          child: Align(
+            alignment: Alignment.bottomCenter,
             child: Container(
               constraints: BoxConstraints(maxWidth: maxWidth),
               decoration: BoxDecoration(
-                color: AppColors.background,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.grey[900]
+                    : AppColors.background,
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(24)),
                 boxShadow: isDesktop
-                    ? [BoxShadow(color: Colors.black12, blurRadius: 32, spreadRadius: 2)]
+                    ? [
+                        BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 32,
+                            spreadRadius: 2)
+                      ]
                     : [],
               ),
               child: SingleChildScrollView(
@@ -93,7 +110,8 @@ class _SignupSheetState extends State<SignupSheet> {
                     left: horizontalPadding,
                     right: horizontalPadding,
                     top: verticalPadding,
-                    bottom: MediaQuery.of(context).viewInsets.bottom + verticalPadding,
+                    bottom: MediaQuery.of(context).viewInsets.bottom +
+                        verticalPadding,
                   ),
                   child: Form(
                     key: _formKey,
@@ -146,7 +164,9 @@ class _SignupSheetState extends State<SignupSheet> {
                         if (error != null)
                           Text(
                             error!,
-                            style: TextStyle(color: Color(0xFFC9ADA7), fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                color: Color(0xFFC9ADA7),
+                                fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                           ),
                         if (error != null) SizedBox(height: spacingSmall),
@@ -165,8 +185,12 @@ class _SignupSheetState extends State<SignupSheet> {
                         SizedBox(height: spacingMedium),
                         TextButton(
                           onPressed: () {
-                            Navigator.pop(context); // Close signup sheet
-                            // Optionally, show login sheet here
+                            Navigator.of(context, rootNavigator: true)
+                                .pop(); // Close signup sheet
+                            Future.microtask(() {
+                              LoginSheet.show(
+                                  context); // Use the root context from the main widget tree
+                            });
                           },
                           child: Text(
                             'Already have an account? Login',
@@ -185,4 +209,3 @@ class _SignupSheetState extends State<SignupSheet> {
     );
   }
 }
-

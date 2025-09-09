@@ -18,10 +18,10 @@ class HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  final breakpoints = ResponsiveBreakpoints.of(context);
-  final isMobile = breakpoints.isMobile;
-  final isTablet = breakpoints.isTablet;
-  // Removed unused isDesktop
+    final breakpoints = ResponsiveBreakpoints.of(context);
+    final isMobile = breakpoints.isMobile;
+    final isTablet = breakpoints.isTablet;
+    // Removed unused isDesktop
     double headlineFontSize;
     double bodyFontSize;
     double verticalPadding;
@@ -62,10 +62,11 @@ class HeroSection extends StatelessWidget {
     }
 
     return Padding(
-      padding: padding ?? EdgeInsets.symmetric(
-        vertical: verticalPadding,
-        horizontal: horizontalPadding,
-      ),
+      padding: padding ??
+          EdgeInsets.symmetric(
+            vertical: verticalPadding,
+            horizontal: horizontalPadding,
+          ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -78,7 +79,10 @@ class HeroSection extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [AppColors.primary.withOpacity(1), AppColors.primary.withOpacity(1)],
+                  colors: [
+                    AppColors.primary.withOpacity(0.85),
+                    AppColors.primary.withOpacity(0.85)
+                  ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -93,8 +97,11 @@ class HeroSection extends StatelessWidget {
                     style: TextStyle(
                       fontSize: isMobile ? 24 : 72,
                       fontWeight: FontWeight.w600,
-                      color: const Color.fromARGB(255, 15, 15, 15).withOpacity(0.9),
-                      shadows: [const Shadow(blurRadius: 8, color: Colors.black26)],
+                      color: const Color.fromARGB(255, 15, 15, 15)
+                          .withOpacity(0.9),
+                      shadows: [
+                        const Shadow(blurRadius: 8, color: Colors.black26)
+                      ],
                     ),
                   ),
                   SizedBox(height: 6),
@@ -102,7 +109,8 @@ class HeroSection extends StatelessWidget {
                     'Discover and join local groups, meet new people, and explore your interests.',
                     style: TextStyle(
                       fontSize: isMobile ? 15 : 26,
-                      color: const Color.fromARGB(255, 15, 15, 15).withOpacity(0.85),
+                      color: const Color.fromARGB(255, 15, 15, 15)
+                          .withOpacity(0.85),
                     ),
                   ),
                   SizedBox(height: 20),
@@ -118,11 +126,16 @@ class HeroSection extends StatelessWidget {
                             hintText: 'Search events, groups, or interests',
                             hintStyle: TextStyle(
                               fontSize: isMobile ? 22 : 28,
-                              color: AppColors.primary.withOpacity(0.3),
+                              color: AppColors.primary.withOpacity(0.5),
                             ),
                             filled: true,
-                            fillColor: Colors.white,
-                            prefixIcon: Icon(Icons.search, color: AppColors.primary, size: isMobile ? 24 : 28),
+                            fillColor:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? const Color.fromARGB(255, 44, 44, 44)
+                                    : Colors.white,
+                            prefixIcon: Icon(Icons.search,
+                                color: AppColors.primary,
+                                size: isMobile ? 24 : 28),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
                               borderSide: BorderSide.none,
@@ -135,18 +148,23 @@ class HeroSection extends StatelessWidget {
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.button,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)),
                           elevation: 4,
                           padding: EdgeInsets.symmetric(
                             horizontal: isMobile ? 18 : 22,
                             vertical: isMobile ? 10 : 14,
                           ),
                         ),
-                        child: Text('Search', style: TextStyle(
-                          color: Colors.white,
-                          fontSize: isMobile ? 16 : 18,
-                          fontWeight: FontWeight.w600,
-                        )),
+                        child: Text('Search',
+                            style: TextStyle(
+                              color: Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? Colors.white
+                                  : const Color.fromARGB(255, 44, 44, 44),
+                              fontSize: isMobile ? 16 : 18,
+                              fontWeight: FontWeight.w600,
+                            )),
                       ),
                     ],
                   ),

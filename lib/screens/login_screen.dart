@@ -7,7 +7,6 @@ import '../theme/app_colors.dart';
 import '../services/auth_service.dart';
 import '../screens/signup_screen.dart';
 
-
 class LoginSheet extends StatefulWidget {
   const LoginSheet({Key? key}) : super(key: key);
 
@@ -39,17 +38,26 @@ class _LoginSheetState extends State<LoginSheet> {
   }
 
   void _login() async {
-    setState(() { isLoading = true; error = null; });
-    final success = await AuthService().login(_emailController.text, _passwordController.text);
-    setState(() { isLoading = false; });
+    setState(() {
+      isLoading = true;
+      error = null;
+    });
+    final success = await AuthService()
+        .login(_emailController.text, _passwordController.text);
+    setState(() {
+      isLoading = false;
+    });
     if (success) {
       // Fetch username after login
       final profile = await AuthService().getProfile();
       final username = profile?['name'] ?? 'User';
       Navigator.pop(context); // Close the sheet
-      Navigator.pushReplacementNamed(context, '/suggested-events', arguments: username);
+      Navigator.pushReplacementNamed(context, '/suggested-events',
+          arguments: username);
     } else {
-      setState(() { error = 'Invalid credentials'; });
+      setState(() {
+        error = 'Invalid credentials';
+      });
     }
   }
 
@@ -57,7 +65,7 @@ class _LoginSheetState extends State<LoginSheet> {
   Widget build(BuildContext context) {
     final breakpoints = ResponsiveBreakpoints.of(context);
     final isDesktop = breakpoints.isDesktop || breakpoints.isTablet;
-    final double maxWidth = isDesktop ? 420 : 600;
+    final double maxWidth = isDesktop ? 750 : 600;
     final double horizontalPadding = isDesktop ? 48 : 32;
     final double verticalPadding = isDesktop ? 40 : 24;
     final double titleFontSize = isDesktop ? 28 : 32;
@@ -76,14 +84,23 @@ class _LoginSheetState extends State<LoginSheet> {
       builder: (context, scrollController) {
         return Material(
           color: Colors.transparent,
-          child: Center(
+          child: Align(
+            alignment: Alignment.bottomCenter,
             child: Container(
               constraints: BoxConstraints(maxWidth: maxWidth),
               decoration: BoxDecoration(
-                color: AppColors.background,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.grey[900]
+                    : AppColors.background,
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(24)),
                 boxShadow: isDesktop
-                    ? [BoxShadow(color: Colors.black12, blurRadius: 32, spreadRadius: 2)]
+                    ? [
+                        BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 32,
+                            spreadRadius: 2)
+                      ]
                     : [],
               ),
               child: SingleChildScrollView(
@@ -93,7 +110,8 @@ class _LoginSheetState extends State<LoginSheet> {
                     left: horizontalPadding,
                     right: horizontalPadding,
                     top: verticalPadding,
-                    bottom: MediaQuery.of(context).viewInsets.bottom + verticalPadding,
+                    bottom: MediaQuery.of(context).viewInsets.bottom +
+                        verticalPadding,
                   ),
                   child: Form(
                     key: _formKey,
@@ -141,7 +159,9 @@ class _LoginSheetState extends State<LoginSheet> {
                         if (error != null)
                           Text(
                             error!,
-                            style: TextStyle(color: Color(0xFFC9ADA7), fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                color: Color(0xFFC9ADA7),
+                                fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                           ),
                         if (error != null) SizedBox(height: spacingSmall),

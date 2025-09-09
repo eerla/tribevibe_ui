@@ -63,7 +63,7 @@ class LandingAppBar extends StatelessWidget implements PreferredSizeWidget {
                     height: 48, // adjust as needed
                     fit: BoxFit.contain,
                   ),
-                  SizedBox(width: gap1),
+                  // SizedBox(width: gap1),
                   Text('link',
                       style:
                           Theme.of(context).textTheme.headlineSmall?.copyWith(
